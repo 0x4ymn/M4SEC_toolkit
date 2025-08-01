@@ -1,0 +1,14 @@
+# M4SEC Ultimate CTF & Security Toolkit Manager
+# Python Dependencies
+# Version: 3.0.0 | Build: 20250801-182338
+
+# Core dependencies
+colorama>=0.4.4
+psutil>=5.8.0
+rich>=10.0.0
+click>=8.0.0
+
+# Optional dependencies for enhanced features
+tqdm>=4.62.0
+pyyaml>=6.0
+requests>=2.25.0
