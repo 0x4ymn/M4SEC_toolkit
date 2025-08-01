@@ -68,7 +68,8 @@ class MenuSystem:
             
             status_text = f"({installed_count}/{tools_count} tools installed)"
             
-            print(f"  {self.formatter.menu_number(f'[{cat_id}]')} "
+            cat_id_str = f'[{cat_id}]'
+            print(f"  {self.formatter.menu_number(cat_id_str)} "
                   f"{self.formatter.highlight(name)}")
             print(f"      {self.formatter.menu_description(description)}")
             
@@ -135,13 +136,16 @@ class MenuSystem:
             if is_installed:
                 version = self.tool_manager.get_tool_version(command)
                 if version and version != "Version unknown":
-                    print(f"      {self.formatter.dim(f'Version: {version}')}")
+                    version_str = f'Version: {version}'
+                    print(f"      {self.formatter.dim(version_str)}")
                 path = self.tool_manager.get_tool_path(command)
                 if path:
-                    print(f"      {self.formatter.dim(f'Path: {path}')}")
+                    path_str = f'Path: {path}'
+                    print(f"      {self.formatter.dim(path_str)}")
             else:
                 install_cmd = self.tool_manager.suggest_installation_command(command)
-                print(f"      {self.formatter.warning(f'Install: {install_cmd}')}")
+                install_str = f'Install: {install_cmd}'
+                print(f"      {self.formatter.warning(install_str)}")
             
             print()
             tool_counter += 1
@@ -222,7 +226,8 @@ class MenuSystem:
                 install_cmd = self.tool_manager.suggest_installation_command(command)
                 
                 print(f"• {self.formatter.error(name)} ({category})")
-                print(f"  {self.formatter.dim(f'Install: {install_cmd}')}")
+                install_str = f'Install: {install_cmd}'
+                print(f"  {self.formatter.dim(install_str)}")
         print()
         
         print_separator(80, "═")
@@ -291,7 +296,9 @@ class MenuSystem:
                 user_input = validate_input(user_input)
                 
                 if param_type == "choice" and choices and user_input not in choices:
-                    print(f"  {self.formatter.error(f'Invalid choice. Must be one of: {', '.join(choices)}')}")
+                    choices_str = ', '.join(choices)
+                    error_msg = f'Invalid choice. Must be one of: {choices_str}'
+                    print(f"  {self.formatter.error(error_msg)}")
                     continue
                 
                 if param_type == "boolean":
