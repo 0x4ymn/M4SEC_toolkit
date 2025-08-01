@@ -436,7 +436,6 @@ git checkout -b feature/your-feature-name
 
 - **Bug Reports**: [GitHub Issues](https://github.com/0x4ymn/M4SEC_toolkit/issues)
 - **Feature Requests**: [GitHub Discussions](https://github.com/0x4ymn/M4SEC_toolkit/discussions)
-- **Email Support**: admin@m4sec.team
 - **Documentation**: [docs/](docs/) directory
 
 ## 📄 License
@@ -452,10 +451,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact & Links
 
-- **🌐 Website**: [m4sec.team](https://m4sec.team)
-- **📧 Email**: admin@m4sec.team  
 - **🐙 GitHub**: [0x4ymn/M4SEC_toolkit](https://github.com/0x4ymn/M4SEC_toolkit)
-- **👥 Team**: M4SEC Security Team
+- **👥 Team**: M4SEC Team
 - **📅 Build**: 20250801-182338
 
 ---
