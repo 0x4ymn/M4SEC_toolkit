@@ -296,8 +296,7 @@ class MenuSystem:
                 user_input = validate_input(user_input)
                 
                 if param_type == "choice" and choices and user_input not in choices:
-                    choices_str = ', '.join(choices)
-                    error_msg = f'Invalid choice. Must be one of: {choices_str}'
+                    error_msg = f'Invalid choice. Must be one of: {", ".join(choices)}'
                     print(f"  {self.formatter.error(error_msg)}")
                     continue
                 
