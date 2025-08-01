@@ -10,7 +10,7 @@ Team: m4sec.team
 UTC: 2025-08-01 18:23:38
 """
 
-from .colors import ColorFormatter, clear_screen
+from ui.colors import ColorFormatter, clear_screen
 
 
 class BannerManager:

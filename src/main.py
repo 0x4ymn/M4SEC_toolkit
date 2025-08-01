@@ -132,7 +132,8 @@ class M4SECToolkit:
         print(f"Total Tools: {self.formatter.highlight(str(total_tools))}")
         print(f"Installed:   {self.formatter.success(str(installed_tools))}")
         print(f"Missing:     {self.formatter.error(str(total_tools - installed_tools))}")
-        print(f"Coverage:    {self.formatter.info(f'{(installed_tools/total_tools*100):.1f}%' if total_tools > 0 else '0%')}")
+        coverage_percentage = f'{(installed_tools/total_tools*100):.1f}%' if total_tools > 0 else '0%'
+        print(f"Coverage:    {self.formatter.info(coverage_percentage)}")
     
     def launch_tool_direct(self, tool_name: str) -> None:
         """Launch a specific tool directly"""

@@ -13,8 +13,8 @@ UTC: 2025-08-01 18:23:38
 import shutil
 import subprocess
 from typing import Dict, List, Optional, Tuple, Any
-from .utils import logger, CommandRunner, SystemInfo
-from .config_manager import ConfigManager
+from core.utils import logger, CommandRunner, SystemInfo
+from core.config_manager import ConfigManager
 
 
 class ToolManager:

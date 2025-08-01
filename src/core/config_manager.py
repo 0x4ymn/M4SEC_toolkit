@@ -14,7 +14,7 @@ import os
 import json
 from pathlib import Path
 from typing import Dict, Any, Optional, List
-from .utils import logger, FileManager
+from core.utils import logger, FileManager
 
 
 class ConfigManager:

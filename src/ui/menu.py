@@ -13,12 +13,12 @@ UTC: 2025-08-01 18:23:38
 import sys
 import time
 from typing import Dict, List, Optional, Any, Tuple
-from ..core.config_manager import ConfigManager
-from ..core.tool_manager import ToolManager
-from ..core.terminal_launcher import TerminalLauncher
-from ..core.utils import logger, validate_input
-from .colors import ColorFormatter, print_separator
-from .banner import BannerManager
+from core.config_manager import ConfigManager
+from core.tool_manager import ToolManager
+from core.terminal_launcher import TerminalLauncher
+from core.utils import logger, validate_input
+from ui.colors import ColorFormatter, print_separator
+from ui.banner import BannerManager
 
 
 class MenuSystem:
@@ -175,7 +175,8 @@ class MenuSystem:
         print(f"Total Tools:     {self.formatter.highlight(str(tools_info['total']))}")
         print(f"Installed:       {self.formatter.success(str(tools_info['installed']))}")
         print(f"Missing:         {self.formatter.error(str(tools_info['missing']))}")
-        print(f"Coverage:        {self.formatter.info(f\"{tools_info['percentage']:.1f}%\")}")
+        coverage_text = f"{tools_info['percentage']:.1f}%"
+        print(f"Coverage:        {self.formatter.info(coverage_text)}")
         print()
         
         # System information

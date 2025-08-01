@@ -15,8 +15,8 @@ import shutil
 import subprocess
 import tempfile
 from typing import Dict, List, Optional, Any
-from .utils import logger, FileManager, SystemInfo, validate_input
-from .config_manager import ConfigManager
+from core.utils import logger, FileManager, SystemInfo, validate_input
+from core.config_manager import ConfigManager
 
 
 class TerminalLauncher:
