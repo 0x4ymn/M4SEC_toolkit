@@ -110,7 +110,8 @@ class M4SECToolkit:
             if not tools:
                 continue
             
-            print(f"\n{self.formatter.header(f'[{cat_id}] {name}')}")
+            header_str = f'[{cat_id}] {name}'
+            print(f"\n{self.formatter.header(header_str)}")
             print_separator(60, "─")
             
             for tool_name, tool_config in tools.items():
@@ -231,7 +232,8 @@ class M4SECToolkit:
         # Display missing tools
         missing_tools = self.tool_manager.get_missing_tools()
         if missing_tools:
-            print(f"\n{self.formatter.header(f'MISSING TOOLS ({len(missing_tools)} found):')}")
+            header_str = f'MISSING TOOLS ({len(missing_tools)} found):'
+            print(f"\n{self.formatter.header(header_str)}")
             print_separator(60, "─")
             
             categories_shown = set()
