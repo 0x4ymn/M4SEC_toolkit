@@ -1,10 +1,16 @@
 # M4SEC Ultimate CTF & Security Toolkit Manager
 
+<div align="center">
+
 [![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/0x4ymn/M4SEC_toolkit)
 [![Build](https://img.shields.io/badge/build-20250801--182338-green.svg)](https://github.com/0x4ymn/M4SEC_toolkit)
 [![Python](https://img.shields.io/badge/python-3.8+-brightgreen.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Team](https://img.shields.io/badge/team-m4sec.team-red.svg)](https://m4sec.team)
+[![Tools](https://img.shields.io/badge/tools-41-orange.svg)](https://github.com/0x4ymn/M4SEC_toolkit)
+[![Categories](https://img.shields.io/badge/categories-12-yellow.svg)](https://github.com/0x4ymn/M4SEC_toolkit)
+
+</div>
 
 ```
 ████████████████████████████████████████████████████████████████████████████████
@@ -26,7 +32,11 @@
 ████████████████████████████████████████████████████████████████████████████████
 ```
 
-**Professional all-in-one security toolkit manager that provides interactive launcher for 50+ security tools across 12 categories with terminal integration, guided parameter configuration, and comprehensive health monitoring.**
+<div align="center">
+
+**Professional all-in-one security toolkit manager that provides interactive launcher for 41 security tools across 12 specialized categories with terminal integration, guided parameter configuration, and comprehensive health monitoring.**
+
+</div>
 
 ## 🚀 Quick Start
 
@@ -52,13 +62,13 @@ python3 src/main.py --health
 - Clean, intuitive navigation with help system
 
 ### 🛠️ **Comprehensive Tool Coverage**
-- **50+ security tools** across 12 specialized categories
-- **Web Application Testing**: gobuster, sqlmap, nikto, ffuf
-- **Network Reconnaissance**: nmap, masscan, rustscan, enum4linux  
-- **Binary Analysis**: radare2, gdb, ghidra, strings
-- **Forensics & Steganography**: binwalk, steghide, exiftool, volatility3
-- **Password Cracking**: john, hashcat, hydra
-- **And much more...**
+- **41 security tools** across 12 specialized categories
+- **Web Application Testing** (6 tools): gobuster, sqlmap, nikto, ffuf, dirb, whatweb
+- **Network Reconnaissance** (5 tools): nmap, masscan, rustscan, enum4linux, dnsrecon  
+- **Binary Analysis** (5 tools): radare2, gdb, ghidra, objdump, strings
+- **Forensics & Steganography** (5 tools): binwalk, steghide, exiftool, foremost, volatility3
+- **Password Cracking** (4 tools): john, hashcat, openssl, hydra
+- **And 7 more specialized categories...**
 
 ### 🖥️ **Advanced Terminal Integration**
 - Launches tools in new terminal windows with professional branding
@@ -66,7 +76,13 @@ python3 src/main.py --health
 - Automatic terminal detection and configuration
 - Custom launch scripts with proper command formatting
 
-### ⚙️ **Intelligent Configuration**
+### ⚙️ **Smart Environment Management**
+- Python-based architecture (79.4%) with Shell script integration (20.6%)
+- Virtual environment support with automatic detection
+- Smart environment management and dependency handling
+- Professional configuration management with JSON-based tool definitions
+
+### 🎛️ **Intelligent Configuration**
 - Interactive parameter configuration with validation
 - Smart defaults and example commands
 - JSON-based tool definitions for easy extensibility  
@@ -95,7 +111,7 @@ python3 src/main.py --tool nmap
 ### System Health Check
 ```bash
 python3 src/main.py --health
-# View installation status of all 50+ tools and system compatibility
+# View installation status of all 41 tools and system compatibility
 ```
 
 ### List All Tools
@@ -132,21 +148,40 @@ M4SEC_toolkit/
 └── requirements.txt       # Python dependencies
 ```
 
+## 📋 System Requirements
+
+### **Minimum Requirements**
+- **Operating System**: Linux (Ubuntu 18.04+, Debian 10+, CentOS 7+, Arch Linux)
+- **Python Version**: 3.8 or higher
+- **Terminal Emulator**: gnome-terminal, konsole, xfce4-terminal, or xterm
+- **Memory**: 512MB RAM minimum (1GB+ recommended)
+- **Storage**: 100MB for toolkit + space for security tools
+
+### **Recommended Setup**
+- **OS**: Ubuntu 20.04+ or Debian 11+
+- **Python**: 3.9+ with virtual environment support
+- **Terminal**: gnome-terminal or konsole for best experience
+- **Memory**: 2GB+ RAM for heavy tools like Ghidra
+- **Storage**: 5GB+ for full tool installation
+
+### **Compatible Platforms**
+- ✅ **Ubuntu** 18.04, 20.04, 22.04+
+- ✅ **Debian** 10, 11, 12
+- ✅ **CentOS/RHEL** 7, 8, 9
+- ✅ **Arch Linux** (latest)
+- ✅ **Kali Linux** (recommended for security testing)
+- ⚠️ **macOS** (limited support, manual tool installation required)
+
 ## 🔧 Installation
 
-### Prerequisites
-- **Linux OS** (Ubuntu 18.04+, Debian 10+, CentOS 7+, Arch Linux)
-- **Python 3.8+** 
-- **Terminal emulator** (gnome-terminal, konsole, xfce4-terminal, xterm)
-
-### Automatic Installation
+### **Quick Installation (Recommended)**
 ```bash
 git clone https://github.com/0x4ymn/M4SEC_toolkit.git
 cd M4SEC_toolkit
 ./scripts/install.sh
 ```
 
-### Manual Installation
+### **Manual Installation**
 ```bash
 # Install Python dependencies
 pip3 install -r requirements.txt
@@ -160,20 +195,22 @@ python3 src/main.py --version
 
 ## 🛠️ Tool Categories
 
-| Category | Tools | Description |
-|----------|--------|-------------|
-| **1. Web Application Testing** | gobuster, sqlmap, nikto, ffuf, dirb, whatweb | Web security assessment tools |
-| **2. Network Reconnaissance** | nmap, masscan, rustscan, enum4linux, dnsrecon | Network discovery and scanning |
-| **3. Binary Analysis** | radare2, gdb, ghidra, objdump, strings | Reverse engineering frameworks |
-| **4. Forensics & Steganography** | binwalk, steghide, exiftool, foremost, volatility3 | Digital forensics tools |
-| **5. Cryptography & Passwords** | john, hashcat, openssl, hydra | Password cracking and crypto |
-| **6. Wireless Security** | aircrack-ng, reaver | WiFi penetration testing |
-| **7. Social Engineering & OSINT** | theharvester, maltego | Information gathering |
-| **8. Exploitation** | metasploit, msfvenom | Penetration testing frameworks |
-| **9. Mobile Security** | apktool, jadx | Mobile application testing |
-| **10. Cloud Security** | awscli, scout | Cloud infrastructure assessment |
-| **11. Database Security** | sqlmap, nosqlimap | Database vulnerability testing |
-| **12. Miscellaneous** | burpsuite, wireshark, netcat, socat | Additional security utilities |
+| Category | Count | Tools | Description |
+|----------|-------|--------|-------------|
+| **1. Web Application Testing** | 6 | gobuster, sqlmap, nikto, ffuf, dirb, whatweb | Web security assessment tools |
+| **2. Network Reconnaissance** | 5 | nmap, masscan, rustscan, enum4linux, dnsrecon | Network discovery and scanning |
+| **3. Binary Analysis** | 5 | radare2, gdb, ghidra, objdump, strings | Reverse engineering frameworks |
+| **4. Forensics & Steganography** | 5 | binwalk, steghide, exiftool, foremost, volatility3 | Digital forensics tools |
+| **5. Cryptography & Passwords** | 4 | john, hashcat, openssl, hydra | Password cracking and crypto |
+| **6. Wireless Security** | 2 | aircrack-ng, reaver | WiFi penetration testing |
+| **7. Social Engineering & OSINT** | 2 | theharvester, maltego | Information gathering |
+| **8. Exploitation** | 2 | metasploit, msfvenom | Penetration testing frameworks |
+| **9. Mobile Security** | 2 | apktool, jadx | Mobile application testing |
+| **10. Cloud Security** | 2 | awscli, scout | Cloud infrastructure assessment |
+| **11. Database Security** | 2 | sqlmap, nosqlimap | Database vulnerability testing |
+| **12. Miscellaneous** | 4 | burpsuite, wireshark, netcat, socat | Additional security utilities |
+
+**Total: 41 professional security tools across 12 specialized categories**
 
 ## 💻 Command Line Interface
 
@@ -200,27 +237,31 @@ python3 src/main.py --version
 python3 src/main.py --config /path/to/config.json
 ```
 
-## 🎨 Screenshots & UI
+## 🎨 Screenshots & Interface Demo
 
-### Main Menu
+### **Main Menu Interface**
 ```
 🔧 SECURITY TOOL CATEGORIES
 ═══════════════════════════════════════════════════════════════════════════════
 
-  [1] Web Application Testing
+  [1] Web Application Testing (6 tools)
       Tools for web application security testing and vulnerability assessment
-      ✅ (4/6 tools installed)
+      ⚠️ (2/6 tools installed) - Install missing: nikto, ffuf, dirb, whatweb
 
-  [2] Network Reconnaissance & Scanning  
+  [2] Network Reconnaissance & Scanning (5 tools)
       Network discovery and reconnaissance tools
-      ⚠️ (3/5 tools installed)
+      ❌ (0/5 tools installed) - Install missing: nmap, masscan, rustscan
+
+  [3] Binary Analysis & Reverse Engineering (5 tools)
+      Reverse engineering and binary analysis frameworks
+      ❌ (0/5 tools installed) - Install missing: radare2, gdb, ghidra
 
   [s] System Status & Health Check
   [h] Help & Documentation  
   [q] Quit M4SEC Toolkit
 ```
 
-### Tool Selection
+### **Tool Selection Menu**
 ```
 🛠️  TOOLS IN WEB APPLICATION TESTING
 ═══════════════════════════════════════════════════════════════════════════════
@@ -229,14 +270,62 @@ python3 src/main.py --config /path/to/config.json
       Fast directory/file brute-forcer written in Go
       Version: gobuster v3.1.0
       Path: /usr/bin/gobuster
+      Status: Ready to launch
 
   [2] ✅ sqlmap  
       Automatic SQL injection and database takeover tool
       Version: sqlmap/1.6.12#stable
+      Status: Ready to launch
 
   [3] ❌ nikto
       Web server scanner for vulnerabilities and misconfigurations  
+      Status: Not installed
       Install: sudo apt install nikto
+
+  [4] ❌ ffuf
+      Fast web fuzzer written in Go
+      Status: Not installed  
+      Install: sudo apt install ffuf
+
+  [b] Back to Categories  [h] Help  [q] Quit
+```
+
+### **System Health Dashboard**
+```
+🔧 M4SEC TOOLKIT HEALTH STATUS
+════════════════════════════════════════════════════════════════════════════════
+
+🛠️  TOOLS SUMMARY
+────────────────────────
+Total Tools:     41
+Installed:       5  
+Missing:         36
+Coverage:        12.2%
+
+📊 CATEGORY BREAKDOWN
+────────────────────────
+Web Application Testing:     2/6 tools (33.3%)
+Network Reconnaissance:      0/5 tools (0.0%)
+Binary Analysis:             0/5 tools (0.0%)
+Forensics & Steganography:   0/5 tools (0.0%)
+Cryptography & Passwords:    1/4 tools (25.0%)
+[...additional categories...]
+
+💻 SYSTEM ENVIRONMENT
+────────────────────────
+Platform:        Linux 5.15.0-Ubuntu 22.04
+Python Version:  3.10.6
+Python Status:   ✅ Compatible (3.8+ required)
+Virtual Env:     ✅ Active (recommended)
+User Status:     ✅ Running as regular user (secure)
+Terminal Status: ✅ gnome-terminal available
+
+🖥️  TERMINAL SUPPORT
+────────────────────────
+Available Terminals: 3
+Primary:        gnome-terminal (recommended)
+Alternatives:   xfce4-terminal, xterm
+Status:         ✅ Full terminal integration available
 ```
 
 ## 🔒 Security Features
@@ -260,10 +349,10 @@ The health monitoring system provides:
 ```bash
 🛠️  TOOLS SUMMARY
 ────────────────────────
-Total Tools:     50
-Installed:       42  
-Missing:         8
-Coverage:        84.0%
+Total Tools:     41
+Installed:       5  
+Missing:         36
+Coverage:        12.2%
 
 💻 SYSTEM INFORMATION  
 ────────────────────────
@@ -284,11 +373,12 @@ Status:          ✅ Terminal support available
 ## 🎯 Use Cases
 
 ### CTF Competitions
-Perfect for Capture The Flag events with comprehensive tool coverage:
-- **Web challenges**: gobuster, sqlmap, nikto, ffuf
-- **Network challenges**: nmap, masscan, enum4linux  
-- **Forensics challenges**: binwalk, exiftool, volatility3
-- **Crypto challenges**: john, hashcat, openssl
+Perfect for Capture The Flag events with comprehensive tool coverage across all 41 tools:
+- **Web challenges**: gobuster, sqlmap, nikto, ffuf, dirb, whatweb (6 tools)
+- **Network challenges**: nmap, masscan, rustscan, enum4linux, dnsrecon (5 tools)
+- **Forensics challenges**: binwalk, steghide, exiftool, foremost, volatility3 (5 tools)
+- **Crypto challenges**: john, hashcat, openssl, hydra (4 tools)
+- **Binary challenges**: radare2, gdb, ghidra, objdump, strings (5 tools)
 
 ### Penetration Testing
 Professional penetration testing workflow:
@@ -382,9 +472,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Technical Specifications:**
 - **Python**: 3.8+ compatibility
-- **Architecture**: Modular design with separation of concerns
+- **Architecture**: 79.4% Python (3,121 lines) + 20.6% Shell scripts (811 lines)
+- **Total Tools**: 41 professional security tools across 12 categories
 - **Configuration**: JSON-based with extensible structure
-- **UI**: Professional ANSI color terminal interface
+- **UI**: Professional ANSI color terminal interface with ASCII art branding
 - **Security**: Built-in safety mechanisms and input validation
 
 ---
