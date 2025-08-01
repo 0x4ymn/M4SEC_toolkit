@@ -1,0 +1,50 @@
+{
+  "application": {
+    "name": "M4SEC Ultimate CTF & Security Toolkit Manager",
+    "version": "3.0.0",
+    "build": "20250801-182338",
+    "author": "0x4ymn",
+    "team": "m4sec.team",
+    "utc": "2025-08-01 18:23:38",
+    "user": "0x4ymn"
+  },
+  "ui": {
+    "show_banner": true,
+    "use_colors": true,
+    "menu_timeout": 300,
+    "clear_screen": true,
+    "animation_speed": 0.1
+  },
+  "terminal": {
+    "preferred_terminal": "auto",
+    "keep_open": true,
+    "working_directory": "~",
+    "title_prefix": "M4SEC -"
+  },
+  "logging": {
+    "enabled": true,
+    "level": "INFO",
+    "file_rotation": true,
+    "max_log_files": 10,
+    "log_format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "security": {
+    "allow_root": false,
+    "sanitize_input": true,
+    "timeout_commands": 300,
+    "validate_paths": true
+  },
+  "paths": {
+    "wordlists_dir": "/usr/share/wordlists",
+    "tools_dir": "/usr/bin",
+    "temp_dir": "/tmp",
+    "output_dir": "~/m4sec_output",
+    "config_dir": "./config"
+  },
+  "performance": {
+    "cache_tool_status": true,
+    "cache_timeout": 300,
+    "max_concurrent_tools": 5,
+    "progress_bar_width": 50
+  }
+}
