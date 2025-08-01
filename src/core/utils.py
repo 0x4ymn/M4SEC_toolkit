@@ -136,6 +136,65 @@ class SystemInfo:
         except Exception:
             pass
         return None
+    
+    @staticmethod
+    def check_python_environment() -> Dict[str, Any]:
+        """Check Python environment status and configuration"""
+        env_info = {
+            "is_externally_managed": False,
+            "is_venv": False,
+            "venv_path": None,
+            "python_path": sys.executable,
+            "site_packages": [],
+            "m4sec_venv_available": False,
+            "recommendations": []
+        }
+        
+        # Check if running in a virtual environment
+        env_info["is_venv"] = hasattr(sys, 'real_prefix') or (
+            hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
+        )
+        
+        if env_info["is_venv"]:
+            env_info["venv_path"] = sys.prefix
+        
+        # Check for externally managed environment
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        externally_managed_files = [
+            f"/usr/lib/python{python_version}/EXTERNALLY-MANAGED",
+            f"/usr/local/lib/python{python_version}/EXTERNALLY-MANAGED",
+            f"{sys.prefix}/EXTERNALLY-MANAGED"
+        ]
+        
+        for file_path in externally_managed_files:
+            if os.path.exists(file_path):
+                env_info["is_externally_managed"] = True
+                break
+        
+        # Check for M4SEC virtual environment
+        m4sec_venv_path = os.path.expanduser("~/.m4sec_venv")
+        if os.path.exists(m4sec_venv_path):
+            env_info["m4sec_venv_available"] = True
+        
+        # Get site packages directories
+        import site
+        env_info["site_packages"] = site.getsitepackages()
+        
+        # Generate recommendations
+        if env_info["is_externally_managed"] and not env_info["is_venv"]:
+            env_info["recommendations"].append(
+                "System has externally-managed Python environment. Use virtual environment."
+            )
+            if env_info["m4sec_venv_available"]:
+                env_info["recommendations"].append(
+                    "M4SEC virtual environment available. Use: ./scripts/activate_m4sec.sh"
+                )
+            else:
+                env_info["recommendations"].append(
+                    "Run installation script to create virtual environment: ./scripts/install.sh"
+                )
+        
+        return env_info
 
 
 class FileManager:
