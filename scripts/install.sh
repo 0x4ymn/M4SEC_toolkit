@@ -74,6 +74,71 @@ check_root() {
     fi
 }
 
+# Check if Python environment is externally managed
+check_externally_managed() {
+    local python_version
+    python_version=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    
+    # Check for EXTERNALLY-MANAGED file in various locations
+    local externally_managed_files=(
+        "/usr/lib/python${python_version}/EXTERNALLY-MANAGED"
+        "/usr/local/lib/python${python_version}/EXTERNALLY-MANAGED"
+        "$(python3 -c 'import sys; print(sys.prefix)')/EXTERNALLY-MANAGED"
+    )
+    
+    for file in "${externally_managed_files[@]}"; do
+        if [ -f "$file" ]; then
+            return 0  # Externally managed
+        fi
+    done
+    return 1  # Not externally managed
+}
+
+# Create and setup virtual environment
+setup_virtual_environment() {
+    local venv_path="$HOME/.m4sec_venv"
+    
+    log_info "Setting up Python virtual environment..."
+    log_info "Virtual environment path: $venv_path"
+    
+    # Remove existing venv if it exists and is corrupted
+    if [ -d "$venv_path" ] && [ ! -f "$venv_path/bin/activate" ]; then
+        log_warning "Removing corrupted virtual environment..."
+        rm -rf "$venv_path"
+    fi
+    
+    # Create virtual environment if it doesn't exist
+    if [ ! -d "$venv_path" ]; then
+        log_info "Creating new virtual environment..."
+        if ! python3 -m venv "$venv_path"; then
+            log_error "Failed to create virtual environment"
+            log_info "Make sure python3-venv is installed:"
+            if [ "$PACKAGE_MANAGER" != "unknown" ]; then
+                log_info "  $INSTALL_CMD python3-venv"
+            fi
+            exit 1
+        fi
+        log_success "Virtual environment created successfully"
+    else
+        log_success "Virtual environment already exists"
+    fi
+    
+    # Activate virtual environment
+    # shellcheck source=/dev/null
+    source "$venv_path/bin/activate"
+    
+    # Upgrade pip in virtual environment
+    log_info "Upgrading pip in virtual environment..."
+    pip install --upgrade pip
+    
+    # Set global variables for use in other functions
+    VENV_PATH="$venv_path"
+    VENV_ACTIVE=1
+    
+    log_success "Virtual environment is ready and activated"
+    echo
+}
+
 # Check system compatibility
 check_system() {
     log_info "Checking system compatibility..."
@@ -93,6 +158,17 @@ check_system() {
     else
         log_error "Python 3 is not installed"
         exit 1
+    fi
+    
+    # Check for externally managed environment
+    if check_externally_managed; then
+        log_warning "Detected externally-managed Python environment"
+        log_info "This system restricts system-wide package installation"
+        log_info "Virtual environment will be created automatically"
+        EXTERNALLY_MANAGED=1
+    else
+        log_success "Python environment allows package installation"
+        EXTERNALLY_MANAGED=0
     fi
     
     # Check for package managers
@@ -125,26 +201,62 @@ check_system() {
 install_python_deps() {
     log_info "Installing Python dependencies..."
     
-    # Check if pip is available
-    if ! command -v pip3 >/dev/null 2>&1; then
-        log_warning "pip3 not found, attempting to install..."
+    # Handle externally managed environments
+    if [ "$EXTERNALLY_MANAGED" -eq 1 ]; then
+        # Check if python3-venv is available
         if [ "$PACKAGE_MANAGER" != "unknown" ]; then
-            $INSTALL_CMD python3-pip
-        else
-            log_error "Cannot install pip3 automatically"
-            exit 1
+            log_info "Installing python3-venv package for virtual environment support..."
+            $INSTALL_CMD python3-venv python3-pip || log_warning "Failed to install python3-venv, continuing..."
         fi
+        
+        # Setup virtual environment
+        setup_virtual_environment
+        PIP_CMD="pip"  # Use pip from venv
+        INSTALL_FLAGS=""  # No --user flag needed in venv
+    else
+        # Check if pip is available for system installation
+        if ! command -v pip3 >/dev/null 2>&1; then
+            log_warning "pip3 not found, attempting to install..."
+            if [ "$PACKAGE_MANAGER" != "unknown" ]; then
+                $INSTALL_CMD python3-pip
+            else
+                log_error "Cannot install pip3 automatically"
+                exit 1
+            fi
+        fi
+        PIP_CMD="pip3"
+        INSTALL_FLAGS="--user"
     fi
     
     # Install requirements
     if [ -f "requirements.txt" ]; then
         log_info "Installing packages from requirements.txt..."
-        pip3 install --user -r requirements.txt
-        log_success "Python dependencies installed"
+        if $PIP_CMD install $INSTALL_FLAGS -r requirements.txt; then
+            log_success "Python dependencies installed successfully"
+        else
+            log_error "Failed to install Python dependencies"
+            if [ "$EXTERNALLY_MANAGED" -eq 0 ]; then
+                log_info "Trying with virtual environment as fallback..."
+                setup_virtual_environment
+                pip install -r requirements.txt
+            else
+                exit 1
+            fi
+        fi
     else
         log_warning "requirements.txt not found, installing core dependencies..."
-        pip3 install --user colorama psutil rich click tqdm pyyaml requests
-        log_success "Core Python dependencies installed"
+        if $PIP_CMD install $INSTALL_FLAGS colorama psutil rich click tqdm pyyaml requests; then
+            log_success "Core Python dependencies installed successfully"
+        else
+            log_error "Failed to install core Python dependencies"
+            if [ "$EXTERNALLY_MANAGED" -eq 0 ]; then
+                log_info "Trying with virtual environment as fallback..."
+                setup_virtual_environment
+                pip install colorama psutil rich click tqdm pyyaml requests
+            else
+                exit 1
+            fi
+        fi
     fi
     echo
 }
@@ -268,8 +380,15 @@ setup_directories() {
 test_installation() {
     log_info "Testing M4SEC Toolkit installation..."
     
+    # Set up Python command based on environment
+    if [ "$VENV_ACTIVE" -eq 1 ]; then
+        PYTHON_CMD="python3"  # Virtual environment is already activated
+    else
+        PYTHON_CMD="python3"
+    fi
+    
     # Test Python imports
-    if python3 -c "
+    if $PYTHON_CMD -c "
 import sys
 sys.path.insert(0, 'src')
 try:
@@ -284,14 +403,17 @@ except ImportError as e:
         log_success "Python modules test passed"
     else
         log_error "Python modules test failed"
+        if [ "$VENV_ACTIVE" -eq 1 ]; then
+            log_info "Virtual environment may need additional setup"
+        fi
         return 1
     fi
     
     # Test basic functionality
-    if python3 src/main.py --version >/dev/null 2>&1; then
+    if $PYTHON_CMD src/main.py --version >/dev/null 2>&1; then
         log_success "Basic functionality test passed"
     else
-        log_warning "Basic functionality test failed (may be normal)"
+        log_warning "Basic functionality test failed (may be normal during initial setup)"
     fi
     
     echo
@@ -300,6 +422,11 @@ except ImportError as e:
 # Main installation function
 main() {
     print_banner
+    
+    # Initialize global variables
+    EXTERNALLY_MANAGED=0
+    VENV_ACTIVE=0
+    VENV_PATH=""
     
     log_info "Starting M4SEC Toolkit installation..."
     log_info "This will install dependencies and set up the environment"
@@ -334,17 +461,49 @@ main() {
     echo
     log_success "M4SEC Toolkit has been installed successfully!"
     echo
+    
+    # Show environment-specific instructions
+    if [ "$VENV_ACTIVE" -eq 1 ]; then
+        log_info "🔧 VIRTUAL ENVIRONMENT SETUP:"
+        echo -e "${YELLOW}  Virtual environment created at: ${VENV_PATH}${NC}"
+        echo
+        log_info "To use M4SEC Toolkit, you need to activate the virtual environment:"
+        echo -e "${CYAN}  source ${VENV_PATH}/bin/activate${NC}"
+        echo
+        log_info "Or use the activation script (recommended):"
+        echo -e "${CYAN}  ./scripts/activate_m4sec.sh${NC}"
+        echo
+        log_warning "The virtual environment must be activated before running M4SEC Toolkit!"
+        echo
+    fi
+    
     log_info "To get started:"
-    log_info "  1. Run: python3 src/main.py"
-    log_info "  2. Or run: python3 src/main.py --help"
-    log_info "  3. For health check: python3 src/main.py --health"
+    if [ "$VENV_ACTIVE" -eq 1 ]; then
+        log_info "  1. Activate environment: source ${VENV_PATH}/bin/activate"
+        log_info "  2. Run: python3 src/main.py"
+        log_info "  3. Or run: python3 src/main.py --help"
+        log_info "  4. For health check: python3 src/main.py --health"
+    else
+        log_info "  1. Run: python3 src/main.py"
+        log_info "  2. Or run: python3 src/main.py --help"
+        log_info "  3. For health check: python3 src/main.py --health"
+    fi
     echo
     log_info "Visit m4sec.team for more information and updates"
     echo
     
-    # Show quick stats
-    log_info "Quick system status:"
-    python3 src/main.py --health 2>/dev/null || log_info "Run --health for detailed status"
+    # Show environment status
+    log_info "Environment Summary:"
+    if [ "$EXTERNALLY_MANAGED" -eq 1 ]; then
+        echo -e "  ${YELLOW}• Externally-managed Python environment detected${NC}"
+        echo -e "  ${GREEN}• Virtual environment created and configured${NC}"
+    else
+        echo -e "  ${GREEN}• Standard Python environment (user packages)${NC}"
+    fi
+    
+    if [ "$VENV_ACTIVE" -eq 1 ]; then
+        echo -e "  ${GREEN}• Virtual environment: ${VENV_PATH}${NC}"
+    fi
     
     echo
     log_success "Happy hacking! 🔐"

@@ -85,6 +85,27 @@ class M4SECToolkit:
             print(self.formatter.error("Python 3.8+ is required"))
             sys.exit(1)
         
+        # Environment check
+        env_info = SystemInfo.check_python_environment()
+        print(f"\n{self.formatter.header('🔧 PYTHON ENVIRONMENT STATUS')}")
+        print_separator(80, "═")
+        
+        print(f"Python Path:     {self.formatter.info(env_info['python_path'])}")
+        print(f"Virtual Env:     {self.formatter.success('Yes') if env_info['is_venv'] else self.formatter.warning('No')}")
+        
+        if env_info["is_venv"]:
+            print(f"Venv Path:       {self.formatter.info(env_info['venv_path'])}")
+        
+        print(f"Externally Managed: {self.formatter.warning('Yes') if env_info['is_externally_managed'] else self.formatter.success('No')}")
+        print(f"M4SEC Venv:      {self.formatter.success('Available') if env_info['m4sec_venv_available'] else self.formatter.warning('Not Found')}")
+        
+        # Show recommendations if any
+        if env_info["recommendations"]:
+            print(f"\n{self.formatter.header('📋 RECOMMENDATIONS')}")
+            print_separator(60, "─")
+            for i, rec in enumerate(env_info["recommendations"], 1):
+                print(f"  {i}. {self.formatter.info(rec)}")
+        
         # Show detailed health information
         self.menu.show_health_status()
     
@@ -280,6 +301,30 @@ class M4SECToolkit:
             print(self.formatter.error("No compatible terminal emulators found"))
             print("Please install one of: gnome-terminal, konsole, xfce4-terminal, xterm")
             sys.exit(1)
+        
+        # Environment validation
+        env_info = SystemInfo.check_python_environment()
+        
+        # Show environment warnings if needed
+        if env_info["is_externally_managed"] and not env_info["is_venv"]:
+            print(self.formatter.warning("\n⚠️  ENVIRONMENT WARNING"))
+            print_separator(60, "─")
+            print("You are running M4SEC Toolkit on an externally-managed Python environment")
+            print("without a virtual environment. This may cause package conflicts.")
+            print()
+            
+            if env_info["m4sec_venv_available"]:
+                print("📦 M4SEC virtual environment is available!")
+                print("   Activate it with: " + self.formatter.highlight("./scripts/activate_m4sec.sh"))
+            else:
+                print("🔧 Create a virtual environment by running:")
+                print("   " + self.formatter.highlight("./scripts/install.sh"))
+            
+            print()
+            confirm = input("Continue anyway? (y/N): ")
+            if confirm.lower() not in ['y', 'yes']:
+                print(self.formatter.info("Exiting. Please use the recommended environment setup."))
+                sys.exit(0)
         
         # Start interactive menu
         self.menu.run()

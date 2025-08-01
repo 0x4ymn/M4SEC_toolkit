@@ -18,11 +18,42 @@ cd M4SEC_toolkit
 ./scripts/install.sh
 ```
 
+The installation script automatically:
+- ✅ Detects externally-managed Python environments
+- ✅ Creates virtual environments when needed
+- ✅ Installs dependencies in the correct environment
+- ✅ Provides clear activation instructions
+
+### Environment Management
+
+M4SEC Toolkit automatically handles different Python environment configurations:
+
+#### For Externally-Managed Environments (Ubuntu 24.04+, Debian 12+)
+The installer detects systems with externally-managed Python environments and automatically:
+1. Creates a dedicated virtual environment at `~/.m4sec_venv`
+2. Installs all dependencies within the virtual environment
+3. Provides an activation script for easy use
+
+#### Usage with Virtual Environment
+```bash
+# Activate M4SEC environment and run toolkit
+./scripts/activate_m4sec.sh
+
+# Or manually activate the environment
+source ~/.m4sec_venv/bin/activate
+python3 src/main.py
+```
+
 ### Manual Installation
 
 ```bash
-# Install Python dependencies
+# For standard environments
 pip3 install -r requirements.txt
+
+# For externally-managed environments
+python3 -m venv ~/.m4sec_venv
+source ~/.m4sec_venv/bin/activate
+pip install -r requirements.txt
 
 # Make scripts executable
 chmod +x scripts/*.sh
@@ -95,6 +126,76 @@ sudo dnf install m4sec-toolkit
 
 # Arch Linux
 yay -S m4sec-toolkit
+```
+
+## 🔧 Environment Troubleshooting
+
+### Common Environment Issues
+
+#### 1. Externally-Managed Environment Error
+```
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+```
+
+**Solution**: Use the automated installer which creates a virtual environment:
+```bash
+./scripts/install.sh
+```
+
+#### 2. Virtual Environment Not Activated
+If you see environment warnings when running M4SEC Toolkit:
+
+```bash
+# Use the activation script (recommended)
+./scripts/activate_m4sec.sh
+
+# Or manually activate
+source ~/.m4sec_venv/bin/activate
+python3 src/main.py
+```
+
+#### 3. Missing python3-venv Package
+```
+Error: The virtual environment was not created successfully
+```
+
+**Solution**: Install virtual environment support:
+```bash
+# Ubuntu/Debian
+sudo apt install python3-venv
+
+# Fedora/CentOS
+sudo dnf install python3-venv
+
+# Arch Linux
+sudo pacman -S python-virtualenv
+```
+
+#### 4. Permission Issues
+```bash
+# If installation fails due to permissions, ensure you're not running as root
+whoami  # Should NOT return 'root'
+
+# If you need to fix ownership
+sudo chown -R $USER:$USER ~/.m4sec_venv
+```
+
+### Health Check Commands
+
+```bash
+# Check environment status
+python3 src/main.py --health
+
+# Check if virtual environment is active
+echo $VIRTUAL_ENV
+
+# Check Python path
+which python3
 ```
 
 ## 📦 Dependency Installation
